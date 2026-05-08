@@ -1,0 +1,65 @@
+You are given an RL-based EEG model.
+
+Modify it to implement:
+
+METHODOLOGY: Hierarchical RL + Temporal Difference Learning
+
+========================================
+ARCHITECTURE
+========================================
+
+1. High-Level Policy:
+   - Select coarse segments
+
+2. Low-Level Policy:
+   - Select frames within segments
+
+Both policies must be separate neural networks.
+
+========================================
+TRAINING
+========================================
+
+1. High-level selects segment
+2. Low-level selects frames
+
+========================================
+TEMPORAL DIFFERENCE LEARNING
+========================================
+
+Implement TD learning:
+
+R_t = r_t + gamma * V(s_t+1)
+
+Use gamma = 0.99
+
+========================================
+LOSS
+========================================
+
+For both policies:
+- Actor-Critic loss
+- TD error
+
+========================================
+REWARD
+========================================
+
+- Per-step reward (not global)
+- Combine:
+   - task reward
+   - temporal consistency reward
+
+========================================
+LOGGING
+========================================
+
+Log:
+- high_level_loss
+- low_level_loss
+- TD_error
+- reward_per_step
+- recall
+
+Save:
+logs/hierarchical_metrics.csv

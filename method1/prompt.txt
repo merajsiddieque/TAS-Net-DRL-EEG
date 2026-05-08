@@ -1,0 +1,67 @@
+You are given a PyTorch-based RL project using REINFORCE and Bernoulli sampling.
+
+Your task is to modify the code to implement:
+
+METHODOLOGY: PPO + Top-K Sampling + Multi-Objective Reward
+
+========================================
+CORE CHANGES
+========================================
+
+1. Replace REINFORCE with PPO:
+   - Store old log probabilities
+   - Compute ratio:
+       ratio = exp(new_log_prob - old_log_prob)
+   - Implement clipped loss:
+       L = min(ratio * advantage, clip(ratio, 1-eps, 1+eps) * advantage)
+   - Use eps = 0.2
+
+2. Replace Bernoulli sampling with Top-K:
+   - From probability scores, select top-K indices
+   - K is configurable (default = 10)
+   - Generate binary action vector from Top-K
+
+========================================
+REWARD FUNCTION
+========================================
+
+Implement:
+
+1. Sparsity:
+   R_sparse = -mean(actions)
+
+2. Smoothness:
+   R_smooth = -mean(abs(a_t - a_t+1))
+
+3. Diversity:
+   - Compute cosine similarity between selected features
+   R_div = -mean(similarity)
+
+Final reward:
+   R = w1*R_sparse + w2*R_smooth + w3*R_div
+
+Weights must be configurable.
+
+========================================
+TRAINING
+========================================
+
+- Compute advantage using baseline or moving average
+- Update policy using PPO objective
+- Keep batch-level updates
+
+========================================
+LOGGING (MANDATORY)
+========================================
+
+Per epoch log:
+- loss_total
+- reward_mean
+- sparsity_reward
+- smoothness_reward
+- diversity_reward
+- recall
+- number_of_selected_frames
+
+Save to:
+logs/ppo_topk_metrics.csv
